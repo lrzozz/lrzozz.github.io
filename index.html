@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="Spam Phising, Web spam phising, Phising, Spam, OzZyTools">
+    <meta name="description" content="Website Ini Dibuat Bertujuan Untuk Mengspam Hacker/Penipu Phising!">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Spam Bot Telegram By OzZyTools">
+    <meta property="og:url" content="https://telegram.org">
+    <meta name="theme-color" content="#E55300">
+    <meta property="twitter:title" content="Spam Phising By OzZyTools">
+    <meta property="og:image" content="https://i.ibb.co/vJFJ78S/Screenshot-2024-01-27-12-15-12-14-f69139cffc4d135a71392e13634f144a.jpg">
+    <link rel="canonical" href="https://google.com">
+    <link rel="icon" href="https://i.ibb.co/vJFJ78S/Screenshot-2024-01-27-12-15-12-14-f69139cffc4d135a71392e13634f144a.jpg" type="image/x-icon">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/vJFJ78S/Screenshot-2024-01-27-12-15-12-14-f69139cffc4d135a71392e13634f144a.jpg">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url("https://file.gifan.id/fonts/gFont.css");
+        body {
+            font-family: "Pacifico", cursive;
+            font-family: "Signika Negative", sans-serif;
+        }
+        #logSpam {
+            white-space: pre-line;
+        }
+    </style>
+    <title>SPAM PHISING BY OzZyTOOLS</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Spam Bot Telegram</h5>
+                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                            <strong>Information</strong>
+                            <hr/>
+                            Jangan Masukkan Teks Apapun Dibagian Pesan Jika Ingin Menspam Dengan Teks Random/Acak. Jika Kamu Ingin Mendapatkan Source Code Nya Bisa Kunjungi > <a href="https://github.com/lrzozz" style="color: red;">Repository</a>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Token Bot Telegram</label>
+                            <div class="input-group">
+                                <input name="tokenBot" type="text" class="form-control" placeholder="Token Bot">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Chat ID Telegram</label>
+                            <div class="input-group">
+                                <input name="IdBot" type="text" class="form-control" placeholder="Chat ID">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Pesan</label>
+                            <div class="input-group">
+                                <input name="Message" type="text" class="form-control" placeholder="Kirim pesan ke Bot (Opsional)">
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <button class="btn btn-primary btn-block" id="btn"><i class="fa-solid fa-right-to-bracket fa-fade"></i> Start</button>
+                        </div>
+                        <div class="d-grid gap-2 mt-3" style="height: auto;">
+                            <button class="btn btn-danger btn-block" id="btnstop" disabled><i class="fa-solid fa-right-to-bracket fa-fade"></i> Stop</button>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label class="form-label">Result/Log</label>
+                            <textarea id="logSpam" class="form-control" rows="5" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            let ajaxRequest; // Variabel untuk menyimpan permintaan AJAX
+            const btnStart = $("#btn");
+            const btnStop = $("#btnstop");
+
+            function getCurrentTime() {
+                const tanggal = new Date();
+                const jam = String(tanggal.getHours()).padStart(2, '0');
+                const menit = String(tanggal.getMinutes()).padStart(2, '0');
+                const detik = String(tanggal.getSeconds()).padStart(2, '0');
+                return `[${jam}:${menit}:${detik}]`;
+            }
+
+            btnStart.click(function() {
+                const botTele = $("input[name='tokenBot']").val();
+                const chatTele = $("input[name='IdBot']").val();
+                const pesanNya = $("input[name='Message']").val();
+
+                if (!botTele || !chatTele) {
+                    alert("Token Bot dan Chat ID harus diisi!");
+                    return;
+                }
+
+                if (pesanNya === "" || pesanNya === null) {
+                    startSpamNM(botTele, chatTele);
+                } else {
+                    startSpam(botTele, chatTele, pesanNya);
+                }
+                // Menonaktifkan tombol Start dan mengaktifkan tombol Stop
+                btnStart.prop('disabled', true);
+                btnStop.prop('disabled', false);
+            });
+
+            btnStop.click(function() {
+                // Periksa apakah ada permintaan AJAX yang aktif
+                if (ajaxRequest && ajaxRequest.readyState !== 4) {
+                    // Batalkan permintaan AJAX
+                    ajaxRequest.abort();
+                    // Mengaktifkan tombol Start dan menonaktifkan tombol Stop
+                    btnStart.prop('disabled', false);
+                    btnStop.prop('disabled', true);
+                    $("#logSpam").val(`${getCurrentTime()} Proses spam dihentikan dan log di hapus!\n`);
+                }
+            });
+
+            function startSpam(botTele, chatTele, pesanNya) {
+                // Fungsi untuk memulai proses spamming
+                ajaxRequest = $.ajax({
+                    url: "https://api.telegram.org/bot" + botTele + "/sendMessage",
+                    type: "POST",
+                    data: {
+                        chat_id: chatTele,
+                        text: pesanNya
+                    },
+                    success: function(response) {
+                        $("#logSpam").append(`${getCurrentTime()} Spam Berhasil!\n`);
+                        startSpam(botTele, chatTele, pesanNya);
+                    },
+                    error: function(xhr, status, error) {
+                        $("#logSpam").val(`${getCurrentTime()} Spam Gagal!\n`);
+                    }
+                });
+            }
+
+            function startSpamNM(botTele, chatTele) {
+                function getRandomCharacter(string) {
+                    const randomIndex = Math.floor(Math.random() * string.length);
+                    return string[randomIndex];
+                }
+                function generateRandomText(length) {
+                    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567891011'; // Karakter teks
+                    let randomText = '';
+                    for (let i = 0; i < length; i++) {
+                        const randomChar = getRandomCharacter(characters);
+                        randomText += randomChar;
+                    }
+                    return randomText;
+                }
+                const hasilteks = generateRandomText(1000);
+                ajaxRequest = $.ajax({
+                    url: "https://api.telegram.org/bot" + botTele + "/sendMessage",
+                    type: "POST",
+                    data: {
+                        chat_id: chatTele,
+                        text: hasilteks
+                    },
+                    success: function(response) {
+                        $("#logSpam").append(`${getCurrentTime()} Spam Berhasil!\n`);
+                        startSpamNM(botTele, chatTele);
+                    },
+                    error: function(xhr, status, error) {
+                        $("#logSpam").val(`${getCurrentTime()} Spam Gagal!\n`);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
